@@ -51,120 +51,6 @@
       padding: 0 var(--gap);
     }
 
-    /* ════════════════════════════════
-       Header — identical across all detail pages
-    ════════════════════════════════ */
-    .site-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 0;
-    }
-
-    .site-name {
-      font-size: 1rem;
-      font-weight: 400;
-      color: var(--primary);
-      white-space: nowrap;
-    }
-
-    .site-name:hover { color: var(--secondary); }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .site-nav {
-      display: flex;
-      gap: 24px;
-    }
-
-    .site-nav a {
-      font-size: 1rem;
-      color: var(--secondary);
-      transition: color 0.1s;
-      white-space: nowrap;
-    }
-
-    .site-nav a:hover { color: var(--primary); }
-    .site-nav a:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 2px; }
-
-    .site-nav a.active {
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    /* ════════════════════════════════
-       Theme Switch — identical across all pages
-    ════════════════════════════════ */
-    .theme-switch {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      width: 68px;
-      height: 32px;
-      border-radius: 999px;
-      background: rgb(206, 206, 212);
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      flex-shrink: 0;
-      transition: background 0.2s;
-    }
-
-    [data-theme="dark"] .theme-switch { background: rgb(52, 52, 64); }
-
-    .theme-switch:focus-visible {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
-      border-radius: 999px;
-    }
-
-    .ts-thumb {
-      position: absolute;
-      left: 3px;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: #ffffff;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
-      transition: transform 0.2s cubic-bezier(0.4,0,0.2,1), background 0.2s;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    [data-theme="dark"] .ts-thumb {
-      transform: translateX(36px);
-      background: rgb(36, 36, 48);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.45);
-    }
-
-    .ts-icon {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      transition: color 0.2s, opacity 0.2s;
-    }
-
-    .ts-icon svg {
-      width: 14px;
-      height: 14px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2.25;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .ts-sun  { left: 9px;  color: rgb(45,45,50); opacity: 1;    }
-    .ts-moon { right: 9px; color: rgb(45,45,50); opacity: 0.35; }
-    [data-theme="dark"] .ts-sun  { color: rgb(158,158,172); opacity: 0.4; }
-    [data-theme="dark"] .ts-moon { color: rgb(205,205,220); opacity: 1;   }
-
     /* ── Main content ── */
     .page-main { padding: 52px 0 80px; }
 
@@ -196,26 +82,7 @@
 </head>
 <body>
   <div class="site-wrapper">
-    <header class="site-header">
-      <a href="index.html" class="site-name">Eli Lunt</a>
-      <div class="header-right">
-        <nav class="site-nav" aria-label="Site sections">
-          <a href="about.html"      class="active">About</a>
-          <a href="research.html">Research</a>
-          <a href="experience.html">Experience</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-        <button class="theme-switch" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()">
-          <span class="ts-thumb"></span>
-          <span class="ts-icon ts-sun" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-          </span>
-          <span class="ts-icon ts-moon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          </span>
-        </button>
-      </div>
-    </header>
+    <div id="nav-mount"></div>
 
     <main class="page-main">
       <h1 class="page-title">About</h1>
@@ -251,12 +118,6 @@
     </main>
   </div>
 
-  <script>
-    function toggleTheme() {
-      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-    }
-  </script>
+  <script src="nav.js"></script>
 </body>
 </html>
