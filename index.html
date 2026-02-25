@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eli Lunt — Law · Economics · Policy</title>
+  <!-- Prevent flash of wrong theme -->
+  <script>
+    (function(){
+      var t = localStorage.getItem('theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <style>
+    :root {
+      --gap: 24px;
+      --main-width: 680px;
+      --radius: 8px;
+      --primary: rgb(30, 30, 30);
+      --secondary: rgb(108, 108, 108);
+      --tertiary: rgb(165, 165, 165);
+      --border: rgb(230, 230, 230);
+      --bg: rgb(245, 245, 245);
+      --surface: rgb(255, 255, 255);
+    }
+
+    [data-theme="dark"] {
+      --primary: rgb(218, 218, 218);
+      --secondary: rgb(148, 148, 148);
+      --tertiary: rgb(100, 100, 100);
+      --border: rgb(52, 52, 60);
+      --bg: rgb(20, 20, 24);
+      --surface: rgb(34, 34, 42);
+    }
+
+    *, ::before, ::after { box-sizing: border-box; }
+    body, figure, ul, p, h1 { margin: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      font-size: 18px;
+      line-height: 1.6;
+      word-break: break-word;
+      background: var(--bg);
+      color: var(--primary);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    a { color: var(--primary); }
+
+    /* ── Centered wrapper ── */
+    .page {
+      max-width: calc(var(--main-width) + var(--gap) * 2);
+      margin: 0 auto;
+      padding: 0 var(--gap) 60px;
+    }
+
+    /* ── Top bar (ThemeSwitch only) ── */
+    .top-bar {
+      display: flex;
+      justify-content: flex-end;
+      padding: 18px 0 0;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding-top: 44px;
+    }
+
+    /* ── Photo ── */
+    .profile-photo {
+      display: block;
+      width: 66px;
+      height: 66px;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    /* ── Name ── */
+    .name {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+
+    /* ── Bio ── */
+    .bio {
+      font-size: 1.0625rem;
+      line-height: 1.65;
+      color: var(--primary);
+      margin-bottom: 20px;
+      max-width: 540px;
+    }
+
+    /* ── Icon row ── */
+    .icon-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .icon-link {
+      display: flex;
+      align-items: center;
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.1s;
+    }
+
+    .icon-link:hover { color: var(--secondary); }
+    .icon-link:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 3px; }
+
+    .icon-link svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── Nav buttons ── */
+    .nav-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      display: inline-block;
+      padding: 5px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      color: var(--primary);
+      text-decoration: none;
+      background: var(--surface);
+      transition: background 0.1s, border-color 0.1s;
+    }
+
+    .nav-btn:hover {
+      background: var(--bg);
+      border-color: var(--tertiary);
+    }
+
+    .nav-btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* ════════════════════════════════
+       Theme Switch
+    ════════════════════════════════ */
+    .theme-switch {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      width: 68px;
+      height: 32px;
+      border-radius: 999px;
+      background: rgb(206, 206, 212);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    [data-theme="dark"] .theme-switch {
+      background: rgb(52, 52, 64);
+    }
+
+    .theme-switch:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+      border-radius: 999px;
+    }
+
+    .ts-thumb {
+      position: absolute;
+      left: 3px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+      transition: transform 0.2s cubic-bezier(0.4,0,0.2,1), background 0.2s;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    [data-theme="dark"] .ts-thumb {
+      transform: translateX(36px);
+      background: rgb(36, 36, 48);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.45);
+    }
+
+    .ts-icon {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: color 0.2s, opacity 0.2s;
+    }
+
+    .ts-icon svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.25;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .ts-sun { left: 9px; color: rgb(45, 45, 50); opacity: 1; }
+    .ts-moon { right: 9px; color: rgb(45, 45, 50); opacity: 0.35; }
+
+    [data-theme="dark"] .ts-sun  { color: rgb(158, 158, 172); opacity: 0.4; }
+    [data-theme="dark"] .ts-moon { color: rgb(205, 205, 220); opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="top-bar">
+      <button class="theme-switch" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        <span class="ts-thumb"></span>
+        <span class="ts-icon ts-sun" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </span>
+        <span class="ts-icon ts-moon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </span>
+      </button>
+    </div>
+
+    <div class="hero">
+      <img class="profile-photo" src="assets/85B35A45-AA33-40F6-9644-116A6CE87052_1_105_c.jpeg" alt="Eli Lunt">
+      <h1 class="name">Eli Lunt</h1>
+      <p class="bio">
+        I am a law student at William &amp; Mary Law School. I work
+        primarily on law and economics, especially antitrust, regulatory
+        policy, and securities regulation: why markets fail, how legal
+        institutions respond, and how empirical methods can measure the
+        effects of law on behavior.
+      </p>
+
+      <div class="icon-row">
+        <a href="#" class="icon-link" aria-label="Curriculum Vitae">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </a>
+        <a href="mailto:eli.lunt@wm.edu" class="icon-link" aria-label="Email">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+        <a href="#" class="icon-link" aria-label="William &amp; Mary Law School, Williamsburg, VA">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </a>
+        <a href="#" class="icon-link" aria-label="SSRN Profile">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/eli-lunt" target="_blank" rel="noopener" class="icon-link" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="#" class="icon-link" aria-label="GitHub">
+          <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
+      </div>
+
+      <nav class="nav-row" aria-label="Site sections">
+        <a href="about.html"      class="nav-btn">About</a>
+        <a href="research.html"   class="nav-btn">Research</a>
+        <a href="experience.html" class="nav-btn">Experience</a>
+        <a href="contact.html"    class="nav-btn">Contact</a>
+      </nav>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+  </script>
+</body>
+</html>

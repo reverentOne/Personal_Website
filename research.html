@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research &amp; Writing — Eli Lunt</title>
+  <script>
+    (function(){
+      var t = localStorage.getItem('theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <style>
+    :root {
+      --main-width: 680px;
+      --gap: 24px;
+      --primary: rgb(30, 30, 30);
+      --secondary: rgb(108, 108, 108);
+      --tertiary: rgb(165, 165, 165);
+      --border: rgb(230, 230, 230);
+      --bg-toc: rgb(248, 248, 248);
+    }
+
+    [data-theme="dark"] {
+      --primary: rgb(218, 218, 218);
+      --secondary: rgb(148, 148, 148);
+      --tertiary: rgb(100, 100, 100);
+      --border: rgb(52, 52, 60);
+      --bg-toc: rgb(28, 28, 34);
+    }
+
+    *, ::before, ::after { box-sizing: border-box; }
+    body, p, h1, h2, ul { margin: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      font-size: 18px;
+      line-height: 1.65;
+      background: #fff;
+      color: var(--primary);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    [data-theme="dark"] body { background: rgb(18, 18, 22); }
+
+    a { color: var(--primary); text-decoration: none; }
+
+    /* ── Centered wrapper ── */
+    .site-wrapper {
+      max-width: calc(var(--main-width) + var(--gap) * 2);
+      margin: 0 auto;
+      padding: 0 var(--gap);
+    }
+
+    /* ════════════════════════════════
+       Header — identical across all detail pages
+    ════════════════════════════════ */
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .site-name {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .site-name:hover { color: var(--secondary); }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .site-nav {
+      display: flex;
+      gap: 24px;
+    }
+
+    .site-nav a {
+      font-size: 1rem;
+      color: var(--secondary);
+      transition: color 0.1s;
+      white-space: nowrap;
+    }
+
+    .site-nav a:hover { color: var(--primary); }
+    .site-nav a:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 2px; }
+
+    .site-nav a.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* ════════════════════════════════
+       Theme Switch — identical across all pages
+    ════════════════════════════════ */
+    .theme-switch {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      width: 68px;
+      height: 32px;
+      border-radius: 999px;
+      background: rgb(206, 206, 212);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    [data-theme="dark"] .theme-switch { background: rgb(52, 52, 64); }
+
+    .theme-switch:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+      border-radius: 999px;
+    }
+
+    .ts-thumb {
+      position: absolute;
+      left: 3px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+      transition: transform 0.2s cubic-bezier(0.4,0,0.2,1), background 0.2s;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    [data-theme="dark"] .ts-thumb {
+      transform: translateX(36px);
+      background: rgb(36, 36, 48);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.45);
+    }
+
+    .ts-icon {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: color 0.2s, opacity 0.2s;
+    }
+
+    .ts-icon svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.25;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .ts-sun  { left: 9px;  color: rgb(45,45,50); opacity: 1;    }
+    .ts-moon { right: 9px; color: rgb(45,45,50); opacity: 0.35; }
+    [data-theme="dark"] .ts-sun  { color: rgb(158,158,172); opacity: 0.4; }
+    [data-theme="dark"] .ts-moon { color: rgb(205,205,220); opacity: 1;   }
+
+    /* ── Main content ── */
+    .page-main { padding: 52px 0 80px; }
+
+    .page-title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .page-meta {
+      font-size: 1rem;
+      color: var(--secondary);
+      margin-bottom: 28px;
+    }
+
+    /* ── Table of Contents ── */
+    .toc {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--bg-toc);
+      margin-bottom: 40px;
+      overflow: hidden;
+    }
+
+    .toc summary {
+      cursor: pointer;
+      padding: 11px 16px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--secondary);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+    }
+
+    .toc summary::-webkit-details-marker { display: none; }
+
+    .toc summary::before {
+      content: "▶";
+      font-size: 0.625rem;
+      transition: transform 0.15s;
+    }
+
+    .toc[open] summary::before { transform: rotate(90deg); }
+
+    .toc-body {
+      padding: 6px 16px 14px 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .toc-body ol { margin: 0; padding-left: 18px; }
+
+    .toc-body li { font-size: 1rem; line-height: 1.9; }
+
+    .toc-body a { color: var(--secondary); }
+    .toc-body a:hover { color: var(--primary); text-decoration: underline; }
+
+    /* ── Section headings ── */
+    .section-heading {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 44px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Entry list ── */
+    .entry-list { list-style: none; padding: 0; }
+
+    .entry {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .entry:first-child { padding-top: 0; }
+    .entry:last-child  { border-bottom: none; padding-bottom: 0; }
+
+    .entry-title {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .entry-meta {
+      font-size: 1rem;
+      color: var(--secondary);
+      margin-bottom: 5px;
+    }
+
+    .entry-desc {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--primary);
+    }
+
+    /* ════════════════════════════════
+       Tooltip
+    ════════════════════════════════ */
+    :root {
+      --surface: #ffffff;
+      --radius: 8px;
+      --tip-shadow: 0 4px 24px rgba(0, 0, 0, 0.09), 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    [data-theme="dark"] {
+      --surface: rgb(34, 34, 42);
+      --tip-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), 0 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Trigger: entry title that has a tooltip */
+    .has-tip {
+      cursor: default;
+      border-bottom: 1px dotted var(--tertiary);
+      display: inline;
+    }
+
+    .has-tip:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    /* Floating tooltip panel */
+    #tip-box {
+      position: fixed;
+      z-index: 1000;
+      max-width: 304px;
+      width: max-content;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--tip-shadow);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.12s ease, transform 0.12s ease;
+      transform: translateY(4px);
+    }
+
+    #tip-box.tip-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tip-row {
+      display: grid;
+      gap: 2px;
+      margin-bottom: 10px;
+    }
+
+    .tip-row:last-child { margin-bottom: 0; }
+
+    .tip-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--secondary);
+    }
+
+    .tip-value {
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      color: var(--primary);
+    }
+
+    .tip-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="site-wrapper">
+    <header class="site-header">
+      <a href="index.html" class="site-name">Eli Lunt</a>
+      <div class="header-right">
+        <nav class="site-nav" aria-label="Site sections">
+          <a href="about.html">About</a>
+          <a href="research.html"  class="active">Research</a>
+          <a href="experience.html">Experience</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <button class="theme-switch" type="button" aria-label="Toggle dark mode" onclick="toggleTheme()">
+          <span class="ts-thumb"></span>
+          <span class="ts-icon ts-sun" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          </span>
+          <span class="ts-icon ts-moon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </span>
+        </button>
+      </div>
+    </header>
+
+    <main class="page-main">
+      <h1 class="page-title">Research &amp; Writing</h1>
+      <p class="page-meta">Economics · Law · Policy</p>
+
+      <details class="toc">
+        <summary>Table of Contents</summary>
+        <div class="toc-body">
+          <ol>
+            <li><a href="#publications">Publications</a></li>
+            <li><a href="#notes">Notes &amp; Papers</a></li>
+            <li><a href="#writing-samples">Writing Samples</a></li>
+          </ol>
+        </div>
+      </details>
+
+      <h2 class="section-heading" id="publications">Publications</h2>
+      <ul class="entry-list">
+        <li class="entry">
+          <p class="entry-title has-tip" tabindex="0"
+             data-tip='[{"label":"Status","value":"Forthcoming, peer-reviewed"},{"label":"Venue","value":"Journal Name · 2024"},{"label":"Abstract","value":"Employs instrumental variable and regression discontinuity methods to estimate the causal effect of [regulatory variable] on market outcomes. Co-authored with [co-author]."}]'
+          >[Publication: Title of Econometrics Paper]</p>
+          <p class="entry-meta">Journal Name · 2024 · Peer-reviewed</p>
+          <p class="entry-desc">Empirical analysis of [topic] using econometric methods. Co-authored with [co-author].</p>
+        </li>
+      </ul>
+
+      <h2 class="section-heading" id="notes">Notes &amp; Papers</h2>
+      <ul class="entry-list">
+        <li class="entry">
+          <p class="entry-title has-tip" tabindex="0"
+             data-tip='[{"label":"Type","value":"Law review note · 78 pp."},{"label":"Topics","value":"Securities law · Federal preemption · Regulatory policy"},{"label":"Abstract","value":"Examines the scope of federal preemption doctrine under [statute] and its implications for concurrent state securities enforcement. Argues that [thesis]."}]'
+          >[Note: Regulatory Preemption and the Limits of State Securities Enforcement]</p>
+          <p class="entry-meta">Law review note · Securities law · Regulatory policy</p>
+          <p class="entry-desc">Examines the scope of federal preemption doctrine in the context of state-level securities enforcement actions.</p>
+        </li>
+      </ul>
+
+      <h2 class="section-heading" id="writing-samples">Writing Samples</h2>
+      <ul class="entry-list">
+        <li class="entry">
+          <p class="entry-title has-tip" tabindex="0"
+             data-tip='[{"label":"Type","value":"Legal memorandum"},{"label":"Topics","value":"Antitrust · Sherman Act §§ 1 & 2"},{"label":"Abstract","value":"Applies Sherman Act §§ 1 and 2 to conditional bundling by dominant digital platforms. Analyzes market definition, foreclosure, and procompetitive justifications under rule-of-reason and per se frameworks."}]'
+          >[Writing Sample: Antitrust Implications of Platform Tying Arrangements]</p>
+          <p class="entry-meta">Legal memorandum · Antitrust law</p>
+          <p class="entry-desc">Analyzes Section 1 and Section 2 claims arising from conditional bundling by dominant digital platforms.</p>
+        </li>
+        <li class="entry">
+          <p class="entry-title has-tip" tabindex="0"
+             data-tip='[{"label":"Type","value":"Legal memorandum · 22 pp."},{"label":"Topics","value":"Tort law · Ohio premises liability"},{"label":"Abstract","value":"Evaluates landowner immunity under Ohio Rev. Code § 1533.18 in a recreational injury context. Analyzes the statutory definitions of recreational purpose and the compensation exception as applied to the fact pattern."}]'
+          >[Writing Sample: Memorandum — Premises Liability Under Ohio's Recreational User Statute]</p>
+          <p class="entry-meta">Legal memorandum · Tort law</p>
+          <p class="entry-desc">Evaluates landowner immunity defenses under Ohio Rev. Code § 1533.18 in a recreational injury context.</p>
+        </li>
+      </ul>
+    </main>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+
+    // ── Tooltip engine ──────────────────────────────────────────────
+    (function () {
+      var box = document.createElement('div');
+      box.id = 'tip-box';
+      box.setAttribute('role', 'tooltip');
+      box.setAttribute('aria-live', 'polite');
+      document.body.appendChild(box);
+
+      var showTimer = null;
+      var DELAY = 400; // ms before appearing
+      var GAP = 8;     // px gap between trigger and panel
+
+      function buildContent(rows) {
+        return rows.map(function (row, i) {
+          var html = '<div class="tip-row">'
+            + '<span class="tip-label">' + row.label + '</span>'
+            + '<span class="tip-value">' + row.value + '</span>'
+            + '</div>';
+          if (i < rows.length - 1) html += '<div class="tip-divider"></div>';
+          return html;
+        }).join('');
+      }
+
+      function position(trigger) {
+        var tr = trigger.getBoundingClientRect();
+        var bw = box.offsetWidth;
+        var bh = box.offsetHeight;
+        var vw = window.innerWidth;
+
+        // Prefer above; flip below if not enough room
+        var top = tr.top - bh - GAP;
+        if (top < GAP) top = tr.bottom + GAP;
+
+        // Align left edge with trigger, clamp to viewport
+        var left = tr.left;
+        if (left + bw > vw - GAP) left = vw - bw - GAP;
+        if (left < GAP) left = GAP;
+
+        box.style.top  = top  + 'px';
+        box.style.left = left + 'px';
+      }
+
+      function show(trigger) {
+        var raw = trigger.getAttribute('data-tip');
+        if (!raw) return;
+        var rows;
+        try { rows = JSON.parse(raw); } catch (e) { return; }
+        box.innerHTML = buildContent(rows);
+        // Measure before positioning
+        box.style.opacity = '0';
+        box.style.visibility = 'visible';
+        position(trigger);
+        box.classList.add('tip-visible');
+        trigger.setAttribute('aria-describedby', 'tip-box');
+      }
+
+      function hide(trigger) {
+        box.classList.remove('tip-visible');
+        if (trigger) trigger.removeAttribute('aria-describedby');
+      }
+
+      document.querySelectorAll('.has-tip').forEach(function (el) {
+        el.addEventListener('mouseenter', function () {
+          clearTimeout(showTimer);
+          showTimer = setTimeout(function () { show(el); }, DELAY);
+        });
+
+        el.addEventListener('mousemove', function () {
+          // Re-position if trigger is multiline and mouse moved
+          if (box.classList.contains('tip-visible')) position(el);
+        });
+
+        el.addEventListener('mouseleave', function () {
+          clearTimeout(showTimer);
+          hide(el);
+        });
+
+        // Keyboard: show on focus, hide on blur
+        el.addEventListener('focus', function () {
+          clearTimeout(showTimer);
+          show(el);
+        });
+
+        el.addEventListener('blur', function () {
+          clearTimeout(showTimer);
+          hide(el);
+        });
+
+        // Escape key dismisses
+        el.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            clearTimeout(showTimer);
+            hide(el);
+            el.blur();
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
