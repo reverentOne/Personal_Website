@@ -3,15 +3,16 @@
 
   var SITE_NAME = 'Eli Lunt';
   var NAV_LINKS = [
-    { href: 'about.html',      label: 'About'      },
-    { href: 'research.html',   label: 'Research'   },
-    { href: 'experience.html', label: 'Experience' },
-    { href: 'contact.html',    label: 'Contact'    },
+    { href: '/about/',      label: 'About',      key: 'about'      },
+    { href: '/research/',   label: 'Research',   key: 'research'   },
+    { href: '/experience/', label: 'Experience', key: 'experience' },
   ];
 
   /* ─── Detect active page ──────────────────────────────────────────── */
-  var file = window.location.pathname.split('/').pop() || 'index.html';
-  var isHome = (file === '' || file === 'index.html');
+  var path = window.location.pathname;
+  // Trim trailing slash, then grab the last path segment
+  var section = path.replace(/\/$/, '').split('/').pop();
+  var isHome = (section === '' || section === 'index.html');
 
   /* ─── Inject shared CSS ───────────────────────────────────────────── */
   var css = [
@@ -60,13 +61,13 @@
       mount.innerHTML = SWITCH_HTML;
     } else {
       var links = NAV_LINKS.map(function (link) {
-        var active = (file === link.href) ? ' class="active"' : '';
+        var active = (section === link.key) ? ' class="active"' : '';
         return '<a href="' + link.href + '"' + active + '>' + link.label + '</a>';
       }).join('');
 
       mount.innerHTML =
         '<header class="site-header">' +
-        '<a href="index.html" class="site-name">' + SITE_NAME + '</a>' +
+        '<a href="/" class="site-name">' + SITE_NAME + '</a>' +
         '<div class="header-right">' +
         '<nav class="site-nav" aria-label="Site sections">' + links + '</nav>' +
         SWITCH_HTML +

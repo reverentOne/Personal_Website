@@ -156,9 +156,7 @@
       color: var(--primary);
     }
 
-    /* ════════════════════════════════
-       Tooltip
-    ════════════════════════════════ */
+    /* ── Tooltip ── */
     :root {
       --surface: #ffffff;
       --radius: 8px;
@@ -170,7 +168,6 @@
       --tip-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), 0 1px 4px rgba(0, 0, 0, 0.3);
     }
 
-    /* Trigger: entry title that has a tooltip */
     .has-tip {
       cursor: default;
       border-bottom: 1px dotted var(--tertiary);
@@ -183,7 +180,6 @@
       border-radius: 2px;
     }
 
-    /* Floating tooltip panel */
     #tip-box {
       position: fixed;
       z-index: 1000;
@@ -295,9 +291,8 @@
     </main>
   </div>
 
-  <script src="nav.js"></script>
+  <script src="../nav.js"></script>
   <script>
-    // ── Tooltip engine ──────────────────────────────────────────────
     (function () {
       var box = document.createElement('div');
       box.id = 'tip-box';
@@ -306,8 +301,8 @@
       document.body.appendChild(box);
 
       var showTimer = null;
-      var DELAY = 400; // ms before appearing
-      var GAP = 8;     // px gap between trigger and panel
+      var DELAY = 400;
+      var GAP = 8;
 
       function buildContent(rows) {
         return rows.map(function (row, i) {
@@ -325,16 +320,11 @@
         var bw = box.offsetWidth;
         var bh = box.offsetHeight;
         var vw = window.innerWidth;
-
-        // Prefer above; flip below if not enough room
         var top = tr.top - bh - GAP;
         if (top < GAP) top = tr.bottom + GAP;
-
-        // Align left edge with trigger, clamp to viewport
         var left = tr.left;
         if (left + bw > vw - GAP) left = vw - bw - GAP;
         if (left < GAP) left = GAP;
-
         box.style.top  = top  + 'px';
         box.style.left = left + 'px';
       }
@@ -345,7 +335,6 @@
         var rows;
         try { rows = JSON.parse(raw); } catch (e) { return; }
         box.innerHTML = buildContent(rows);
-        // Measure before positioning
         box.style.opacity = '0';
         box.style.visibility = 'visible';
         position(trigger);
@@ -363,29 +352,21 @@
           clearTimeout(showTimer);
           showTimer = setTimeout(function () { show(el); }, DELAY);
         });
-
         el.addEventListener('mousemove', function () {
-          // Re-position if trigger is multiline and mouse moved
           if (box.classList.contains('tip-visible')) position(el);
         });
-
         el.addEventListener('mouseleave', function () {
           clearTimeout(showTimer);
           hide(el);
         });
-
-        // Keyboard: show on focus, hide on blur
         el.addEventListener('focus', function () {
           clearTimeout(showTimer);
           show(el);
         });
-
         el.addEventListener('blur', function () {
           clearTimeout(showTimer);
           hide(el);
         });
-
-        // Escape key dismisses
         el.addEventListener('keydown', function (e) {
           if (e.key === 'Escape') {
             clearTimeout(showTimer);
