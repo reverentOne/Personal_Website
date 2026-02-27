@@ -68,10 +68,10 @@
     /* ── Photo ── */
     .profile-photo {
       display: block;
-      width: clamp(132px, 27vw, 168px);
-      height: clamp(132px, 27vw, 168px);
+      width: clamp(155px, 32vw, 196px);
+      height: clamp(155px, 32vw, 196px);
       aspect-ratio: 1 / 1;
-      border-radius: 10px;
+      border-radius: 50%;
       margin-bottom: 20px;
       object-fit: cover;
       object-position: center top;
@@ -219,5 +219,22 @@
   </div>
 
   <script src="nav.js"></script>
+  <script>
+    (function () {
+      var photo = document.querySelector('.profile-photo');
+      var nameEl = document.querySelector('.name');
+      if (!photo || !nameEl) return;
+      function align() {
+        // Measure the actual rendered text width, not the block element width
+        var range = document.createRange();
+        range.selectNodeContents(nameEl);
+        var textWidth = range.getBoundingClientRect().width;
+        var offset = (textWidth - photo.offsetWidth) / 2;
+        photo.style.marginLeft = offset + 'px';
+      }
+      align();
+      window.addEventListener('resize', align);
+    })();
+  </script>
 </body>
 </html>
